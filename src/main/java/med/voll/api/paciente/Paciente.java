@@ -24,7 +24,7 @@ public class Paciente {
 
     private String cpf;
 
-    @Embedded
+    @Embedded // serve para que todos os campos da class Endereco seja colocada na tabela de paciente
     private Endereco endereco;
 
     private Boolean ativo;
