@@ -2,9 +2,13 @@ package med.voll.api.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -19,5 +23,17 @@ public class SecurityConfiguration { // é o arquivo de configuração para ser 
 			    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // configura para ser stateless
 			    .and()  // permite continuar o fluxo de configuração
 			    .build();  // finaliza a configuração e cria o objeto SecurityFilterChain com todas as regras definidas até o momento.
+	}
+	
+	// criamos esse bean para conseguir usar ele no controller e fazer a verificação de login e senha
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+		return configuration.getAuthenticationManager();
+	}
+	
+	// bean para dizer que nossas senhas no BD são Bcript(forma de guardar a senha sem mostrar ela diretamente) 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
 }
