@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 @Service
 public class TokenService {
@@ -27,6 +29,20 @@ public class TokenService {
 		        .sign(algorithm); // Gera o token assinado com a senha secreta
 		} catch (JWTCreationException exception){
 			throw new RuntimeException("Erro ao gerro token JWT", exception);
+		}
+	}
+	
+	public String verificarToken(String tokenJWT) { // faz a validação do token recebido
+		try {
+			Algorithm algorithm = Algorithm.HMAC256(secret);
+		    return JWT.require(algorithm)
+		        .withIssuer("CursoAPI_Agendamento")
+		        .build()
+		        .verify(tokenJWT) // verifica se o token é valido
+		        .getSubject(); // vai retornar o usuário que está se autenticando
+		        
+		} catch (JWTVerificationException exception){
+		    throw new RuntimeException("Token JWT inválido ou expirado!");
 		}
 	}
 

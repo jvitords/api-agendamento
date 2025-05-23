@@ -37,8 +37,8 @@ public class AutenticacaoController {
         //String hash = encoder.encode("123456");
         //System.out.println(hash);
 		
-		var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-		Authentication authentication = manager.authenticate(authenticationToken); // é do tipo Authentication
+		var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha()); // cria um objeto que será usado para tentar ser autenticado
+		Authentication authentication = manager.authenticate(authenticationToken); // aqui ele irá tentar autenticar caso o email e senha estiver ok
 		
 		var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
 		
